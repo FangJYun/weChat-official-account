@@ -1,3 +1,4 @@
-# ssr-
-ssr脚本：
-linux服务器执行：sh ssr.sh 或 bash ssr.sh
+-微信公众号资源：
+# ssr-demo目录
+# docker-demo目录
+
