@@ -1,0 +1,8 @@
+#基础镜像
+FROM openjdk:8
+#复制当前文件夹下的jar包到镜像目录下
+COPY demo-0.0.1-SNAPSHOT.jar /myweb/
+#复制当前文件夹下的启动命令到镜像目录下
+COPY startup.sh /myweb/
+#指定容器启动时要执行的命令
+CMD ["sh", "/myweb/startup.sh"]
