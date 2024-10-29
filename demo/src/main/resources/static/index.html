@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="utf-8">
+  <title>聊天</title>
+</head>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<script>
+    let socket;
+    function openSocket() {
+
+        const socketUrl = "ws://127.0.0.1:8080/sendMessage/" + $("#employeeId").val();
+        console.log(socketUrl);
+        if(socket!=null){
+            socket.close();
+            socket=null;
+        }
+        // 判断当前浏览器是否支持WebSocket
+        if ('WebSocket' in window) {
+            socket = new WebSocket(socketUrl);
+        } else {
+            alert('Not support websocket')
+        }
+        //打开事件
+        socket.onopen = function() {
+        };
+        //获得消息事件
+        socket.onmessage = function(msg) {
+           const messageObject = JSON.parse(msg.data);
+           if(isNotEmpty(messageObject.type) && messageObject.type!==0){
+               const message = "用户"+messageObject.fromEmployeeId+"："+messageObject.contentText;
+               setMessageInnerHTML(message);
+           }
+           else{
+               const message = messageObject.contentText;
+               setMessageInnerHTML(message);
+           }
+        };
+        //关闭事件
+        socket.onclose = function() {
+           setMessageInnerHTML($("#employeeId").val()+"已下线");
+        };
+        //发生了错误事件
+        socket.onerror = function() {
+             alert("websocket发生了错误");
+        }
+    }
+
+    function sendMessage() {
+        socket.send('{"toEmployeeId":"'+$("#toEmployeeId").val()+'","contentText":"'+$("#contentText").val()+'"}');
+        setMessageInnerHTML("我："+$("#contentText").val());
+        console.log('{"toEmployeeId":"'+$("#toEmployeeId").val()+'","contentText":"'+$("#contentText").val()+'"}');
+    }
+
+    // 将消息显示在网页上
+    function setMessageInnerHTML(innerHTML) {
+        document.getElementById('message').innerHTML += innerHTML + '<br/>';
+    }
+
+    function isNotEmpty(value) {
+      return value !== null && value !== undefined && value !== "";
+    }
+</script>
+<!--样式-->
+<style>
+    #message {
+        margin-top: 40px;
+        border: 1px solid gray;
+        padding: 20px;
+    }
+</style>
+
+
+<body>
+<p>【当前登录用户】：<input id="employeeId" name="employeeId" type="text" value="a">  <button onclick="openSocket()">登录</button></p>
+<p>【聊天对象】：<input id="toEmployeeId" name="toEmployeeId" type="text" value="b"></p>
+<p>【消息】：</p>
+<textarea id="contentText" name="contentText" placeholder="hello websocket"></textarea>
+<p><button onclick="sendMessage()">发送</button></p>
+<div id="message"></div>
+</body>
+
+</html>

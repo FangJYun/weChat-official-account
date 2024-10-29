@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+  <!--mysql 连接数据库jar 这里选择自己本地位置-->
+  <context id="MysqlContext" targetRuntime="MyBatis3">
+    <property name="beginningDelimiter" value="`"/>
+    <property name="endingDelimiter" value="`"/>
+
+    <!-- 指定生成 Mapper 的继承模板 -->
+    <!--<plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+      &lt;!&ndash; 配置Mapper需要集成的基类，这边是我重新封装的Mapper类，如果不需要则配置默认的都Mapper &ndash;&gt;
+      <property name="mappers" value="tk.mybatis.mapper.common.Mapper"/>
+    </plugin>-->
+    <plugin type="com.example.demo.MybatisGenerator"/>
+    <!-- 支持lombok注释, 去掉set,get方法-->
+    <!--<plugin type="com.example.demo.config.MyBatisPlugin" >
+      <property name="hasLombok" value="true"/>
+    </plugin>-->
+
+    <!-- 自动为entity生成swagger2文档-->
+<!--    <plugin type="com.tbb.idp.mybatis.plugins.GeneratorSwagger2Doc">
+      <property name="apiModelAnnotationPackage" value="io.swagger.annotations.ApiModel"/>
+      <property name="apiModelPropertyAnnotationPackage" value="io.swagger.annotations.ApiModelProperty"/>
+    </plugin>-->
+
+    <commentGenerator>
+      <property name="suppressDate" value="true"/>
+      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+
+    <!-- 数据库连接配置 -->
+    <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+      connectionURL="jdbc:mysql://172.30.11.70:3318/crm?useSSL=false"
+      userId="dev"
+      password="dev123456">
+      <!--  设置可以获取tables remarks信息 -->
+      <property name="useInformationSchema" value="true"/>
+      <!-- 设置可以获取remarks信息 -->
+      <property name="remarks" value="true"/>
+    </jdbcConnection>
+
+    <!-- 生成实体类 -->
+    <javaModelGenerator targetPackage="com.example.demo.entity" targetProject="src/main/java">
+      <property name="trimStrings" value="false"/>
+      <property name="enableSubPackages" value="true"/>
+    </javaModelGenerator>
+
+    <!-- 生成mapper对应xml -->
+    <sqlMapGenerator targetPackage="mapperXml" targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
+
+    <!-- 生成mapper文件 -->
+    <javaClientGenerator type="XMLMAPPER" targetPackage="com.example.demo.mapper" targetProject="src/main/java">
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
+
+    <!-- 指定生成的表 -->
+    <!-- 因为TkMybatis已经支持基础操作，因此不再需要对应Example方法，所以去掉生成 -->
+    <table tableName="crm_company_custom_field_0" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+      enableSelectByExample="false" selectByExampleQueryId="false" enableDeleteByPrimaryKey="false" selectByPrimaryKeyQueryId="false">
+      <generatedKey column="test" sqlStatement="Mysql" identity="true" type="post"/>
+    </table>
+
+    <table tableName="crm_business_opportunity_custom_field_0" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+      enableSelectByExample="false" selectByExampleQueryId="false" enableDeleteByPrimaryKey="false" selectByPrimaryKeyQueryId="false">
+      <generatedKey column="test" sqlStatement="Mysql" identity="true" type="post"/>
+    </table>
+
+  </context>
+</generatorConfiguration>
